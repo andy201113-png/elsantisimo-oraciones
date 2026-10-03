@@ -9,7 +9,7 @@
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- ✅ MONETAG SDK (Zone ID: 11945696) -->
+  <!-- ✅ MONETAG SDK -->
   <script src='//libtl.com/sdk.js' data-zone='11945696' data-sdk='show_11945696'></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,7 +67,6 @@
       --success-bg: #1d432b;
     }
 
-    /* ============ TAMAÑOS DE FUENTE ============ */
     html.font-small { font-size: 17px; }
     html.font-normal { font-size: 20px; }
     html.font-large { font-size: 23px; }
@@ -488,13 +487,41 @@
       0% { background-position: -200% 0; }
       100% { background-position: 200% 0; }
     }
+
+    /* ============ VIDEO CON BOTÓN FULLSCREEN ============ */
     .video-wrapper {
       border-radius: 16px; overflow: hidden;
       border: 1.5px solid var(--border-gold);
       margin-bottom: 22px; background: #000;
+      position: relative;
     }
     .video-wrapper video {
       width: 100%; max-height: 300px; display: block;
+    }
+    .btn-fullscreen {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #dfba77;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.15s;
+    }
+    .btn-fullscreen:active {
+      transform: scale(0.9);
+      background: var(--accent-gold);
+    }
+    .btn-fullscreen svg {
+      width: 22px;
+      height: 22px;
     }
   </style>
 </head>
@@ -733,7 +760,6 @@
     </div>
   </div>
 
-  <!-- Overlay de anuncio SIMULADO (solo se usa si el SDK de Monetag no está cargado) -->
   <div class="modal-backdrop" id="adOverlay" style="background: rgba(0,0,0,0.92); z-index: 150;">
     <div class="modal" style="background: linear-gradient(135deg, #1e2a1e 0%, #2d402d 100%); color: #f0ece6; border-color: #c9a05e;">
       <div class="modal-icon" style="background: rgba(223,186,119,0.2); border-color: #dfba77; color: #dfba77;">
@@ -765,10 +791,7 @@
     const CONFIG = {
       API_ORACIONES: 'https://oraciones-api.vercel.app/oraciones.json',
       API_LECTURAS: 'https://oraciones-api.vercel.app/lecturas.json',
-
-      // ✅ MONETAG ZONE ID
       MONETAG_ZONE_ID: '11945696',
-
       AD_FREE_DURATION_MS: 60 * 60 * 1000,
       INTERSTITIAL_MIN_INTERVAL_MS: 10 * 60 * 1000,
       BACK_AD_MIN_INTERVAL_MS: 5 * 60 * 1000,
@@ -842,7 +865,6 @@
       },
     };
 
-    /* ============ TAMAÑO DE FUENTE ============ */
     const FONT_LEVELS = ['small', 'normal', 'large', 'xlarge'];
     const FONT_LABELS = { small: 'Pequeña', normal: 'Normal', large: 'Grande', xlarge: 'Extra grande' };
 
@@ -862,17 +884,14 @@
       let newIdx = idx;
       if (direction === 'bigger' && idx < FONT_LEVELS.length - 1) newIdx = idx + 1;
       if (direction === 'smaller' && idx > 0) newIdx = idx - 1;
-
       if (newIdx === idx) {
         haptic('medium');
         showToast(direction === 'bigger' ? 'Ya es el tamaño máximo' : 'Ya es el tamaño mínimo', 'info');
         return;
       }
-
       const newLevel = FONT_LEVELS[newIdx];
       applyFontSize(newLevel);
       haptic('light');
-
       const indicator = $('#fontIndicator');
       if (indicator) {
         indicator.textContent = `Letra: ${FONT_LABELS[newLevel]}`;
@@ -882,7 +901,6 @@
       }
     }
 
-    /* ============ UTILIDADES ============ */
     function updateStreak() {
       const today = getLocalDateString();
       const last = Storage.get(STORAGE_KEYS.LAST_ACCESS);
@@ -973,7 +991,6 @@
       Storage.set(key, { timestamp: Date.now(), data });
     }
 
-    /* ============ TELEGRAM ============ */
     const TG = window.Telegram?.WebApp || null;
 
     function initTelegram() {
@@ -1021,81 +1038,48 @@
       else window.open(url, '_blank');
     }
 
-    /* =========================================================
-       MONETAG - ANUNCIOS REALES
-       =========================================================
-       Formatos según la documentación oficial:
-       - Rewarded Interstitial: show_ZONE_ID().then(...)
-       - Rewarded Popup:        show_ZONE_ID('pop').then(...)
-       - In-App Interstitial:   show_ZONE_ID({ type: 'inApp', inAppSettings: {...} })
-       ========================================================= */
+    /* ============ MONETAG ============ */
     async function showAd(type, onReward) {
       const sdkFn = window['show_' + CONFIG.MONETAG_ZONE_ID];
-
-      // Si el SDK de Monetag no está cargado (o falla), usar simulación
       if (typeof sdkFn !== 'function') {
-        console.warn('[Monetag] SDK no disponible. Usando modo simulado.');
+        console.warn('[Monetag] SDK no disponible. Modo simulado.');
         showSimulatedAd(type, onReward);
         return;
       }
-
       console.log(`[Monetag] Mostrando anuncio tipo: ${type}`);
-
       try {
         if (type === 'popup') {
-          // ✅ Rewarded Popup (para "Sin anuncios por 1 hora")
           await sdkFn('pop');
-          console.log('[Monetag] Rewarded Popup completado');
           hapticNotify('success');
           if (onReward) onReward();
-
         } else if (type === 'interstitial') {
-          // ✅ In-App Interstitial (para el anuncio al pulsar atrás)
           await sdkFn({
             type: 'inApp',
-            inAppSettings: {
-              frequency: 1,
-              capping: 1,
-              interval: 0,
-              timeout: 0,
-              everyPage: false,
-            }
+            inAppSettings: { frequency: 1, capping: 1, interval: 0, timeout: 0, everyPage: false }
           });
-          console.log('[Monetag] In-App Interstitial completado');
           if (onReward) onReward();
-
         } else {
-          // ✅ Rewarded Interstitial (para desbloquear tesoros y ganar tesoro extra)
           await sdkFn();
-          console.log('[Monetag] Rewarded Interstitial completado');
           hapticNotify('success');
           if (onReward) onReward();
         }
       } catch (error) {
         console.warn('[Monetag] Anuncio no completado:', error);
-        // No dar recompensa si el usuario cerró el anuncio antes de terminar
         showToast('Anuncio cerrado antes de terminar', 'info');
       }
     }
 
-    /**
-     * Modo simulado: contador de 15 segundos.
-     * Se usa automáticamente si el SDK de Monetag no está cargado (por ejemplo, en localhost).
-     */
     function showSimulatedAd(type, onReward) {
       const overlay = $('#adOverlay');
       const bar = $('#adProgressBar');
       const countdownEl = $('#adCountdown');
       const closeBtn = $('#btnCloseAd');
       let count = 15;
-
       overlay.classList.add('show');
       bar.style.width = '0%';
       countdownEl.textContent = count;
       closeBtn.style.display = 'none';
-
       state.adOverlayCallback = () => { if (onReward) onReward(); };
-
       const timer = setInterval(() => {
         count -= 1;
         countdownEl.textContent = count;
@@ -1106,7 +1090,6 @@
           hapticNotify('success');
         }
       }, 1000);
-
       closeBtn.onclick = () => {
         overlay.classList.remove('show');
         if (state.adOverlayCallback) {
@@ -1134,7 +1117,6 @@
       setTimeout(() => showAd('interstitial'), 400);
     }
 
-    /* ============ API ============ */
     async function fetchWithTimeout(url, ms = 7000) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), ms);
@@ -1175,7 +1157,6 @@
       }
     }
 
-    /* ============ RENDER ============ */
     function renderFeatured() {
       const container = $('#featuredPrayerContainer');
       if (!state.oraciones.length) {
@@ -1309,18 +1290,28 @@
       }).join('');
     }
 
+    /* ============ DETALLE CON VIDEO FULLSCREEN ============ */
     function renderDetail(oracion) {
       const body = $('#detailBody');
       const isFav = isFavorite(oracion.id);
       const hasVideo = !!oracion.urlVideo;
       body.innerHTML = `
         ${hasVideo ? `
-          <div class="video-wrapper" style="margin-bottom: 22px;">
+          <div class="video-wrapper" id="videoWrapper" style="margin-bottom: 22px;">
             <video id="prayerVideo" src="${oracion.urlVideo}" poster="${oracion.urlImagen}"
-              controls autoplay playsinline preload="auto"
+              controls autoplay playsinline webkit-playsinline preload="auto"
+              x-webkit-airplay="allow" allowfullscreen
               style="width:100%; max-height: 300px; display:block; background:#000;">
               Tu navegador no soporta el reproductor de video.
             </video>
+            <button class="btn-fullscreen" id="btnFullscreenVideo" title="Pantalla completa">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+                <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
+                <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+                <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+              </svg>
+            </button>
           </div>
         ` : `
           <div class="detail-cover">
@@ -1343,6 +1334,8 @@
           </p>
         </div>
       `;
+
+      // Autoplay del video
       if (hasVideo) {
         const video = document.getElementById('prayerVideo');
         if (video) {
@@ -1354,7 +1347,33 @@
             });
           }
         }
+
+        // Botón de pantalla completa personalizado
+        const btnFullscreen = document.getElementById('btnFullscreenVideo');
+        if (btnFullscreen) {
+          btnFullscreen.addEventListener('click', (e) => {
+            e.stopPropagation();
+            haptic('medium');
+            const vid = document.getElementById('prayerVideo');
+            if (!vid) return;
+            if (vid.requestFullscreen) {
+              vid.requestFullscreen().catch((err) => {
+                console.warn('requestFullscreen falló, probando webkitEnterFullscreen:', err);
+                if (vid.webkitEnterFullscreen) vid.webkitEnterFullscreen();
+              });
+            } else if (vid.webkitEnterFullscreen) {
+              vid.webkitEnterFullscreen(); // iOS Safari
+            } else if (vid.webkitRequestFullscreen) {
+              vid.webkitRequestFullscreen();
+            } else if (vid.msRequestFullscreen) {
+              vid.msRequestFullscreen();
+            } else {
+              showToast('Pantalla completa no disponible en este dispositivo', 'info');
+            }
+          });
+        }
       }
+
       const btnFav = $('#btnFavorite');
       if (isFav) {
         btnFav.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#dfba77" stroke="#dfba77" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
@@ -1377,7 +1396,6 @@
         : 'Sin anuncios por 1 hora';
     }
 
-    /* ============ EVENTOS ============ */
     function switchTab(tab) {
       haptic('light');
       state.currentTab = tab;
@@ -1432,25 +1450,20 @@
       maybeShowBackAd();
     }
 
-    /* ============ INIT ============ */
     async function init() {
       initTelegram();
       applyFontSize(getCurrentFontSize());
-
       const theme = Storage.get(STORAGE_KEYS.THEME, 'light');
       if (theme === 'dark') document.body.classList.add('dark');
-
       updateStreak();
       state.favorites = getFavorites();
       state.readPrayers = getReadPrayers();
       state.unlockedTreasurePrayers = getUnlockedTreasures();
-
       try {
         [state.oraciones, state.lecturas] = await Promise.all([
           loadOraciones(), loadLecturas(),
         ]);
       } catch (e) { console.error('Load error', e); }
-
       renderFeatured();
       renderStats();
       renderReadings();
@@ -1537,7 +1550,6 @@
           showToast('El modo sin anuncios ya está activo', 'info');
           return;
         }
-        // ✅ Usa Rewarded Popup (formato 'pop')
         showAd('popup', () => {
           activateAdFree();
           hapticNotify('success');
