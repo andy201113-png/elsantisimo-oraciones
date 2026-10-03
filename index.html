@@ -523,6 +523,55 @@
       width: 22px;
       height: 22px;
     }
+
+    /* ============ OVERLAY PANTALLA COMPLETA PARA VIDEO ============ */
+    .video-fullscreen-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+    .video-fullscreen-overlay.show {
+      display: flex;
+      animation: fadeIn 0.2s;
+    }
+    .video-fullscreen-overlay video {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+    .btn-close-fullscreen {
+      position: absolute;
+      top: max(16px, env(safe-area-inset-top, 16px));
+      right: 16px;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #dfba77;
+      cursor: pointer;
+      z-index: 10000;
+      transition: all 0.15s;
+    }
+    .btn-close-fullscreen:active {
+      transform: scale(0.9);
+      background: var(--accent-gold);
+    }
+    .btn-close-fullscreen svg {
+      width: 24px;
+      height: 24px;
+    }
   </style>
 </head>
 
@@ -784,6 +833,17 @@
 
   <div class="toast" id="toast"></div>
   <div class="font-level-indicator" id="fontIndicator">Letra: Normal</div>
+
+  <!-- ============ OVERLAY PANTALLA COMPLETA PARA VIDEO ============ -->
+  <div class="video-fullscreen-overlay" id="videoFullscreenOverlay">
+    <button class="btn-close-fullscreen" id="btnCloseFullscreen" title="Cerrar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <video id="fullscreenVideo" controls playsinline webkit-playsinline preload="auto"></video>
+  </div>
 
   <script>
     'use strict';
@@ -1117,6 +1177,38 @@
       setTimeout(() => showAd('interstitial'), 400);
     }
 
+    /* =========================================================
+       PANTALLA COMPLETA PARA VIDEO (overlay CSS - funciona en Telegram)
+       ========================================================= */
+    function openVideoFullscreen(videoUrl) {
+      const overlay = document.getElementById('videoFullscreenOverlay');
+      const video = document.getElementById('fullscreenVideo');
+      if (!overlay || !video) return;
+
+      const smallVideo = document.getElementById('prayerVideo');
+      if (smallVideo) smallVideo.pause();
+
+      video.src = videoUrl;
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+
+      video.play().catch((err) => console.warn('Autoplay fullscreen:', err));
+    }
+
+    function closeVideoFullscreen() {
+      const overlay = document.getElementById('videoFullscreenOverlay');
+      const video = document.getElementById('fullscreenVideo');
+      if (!overlay || !video) return;
+
+      video.pause();
+      video.src = '';
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+
+      const smallVideo = document.getElementById('prayerVideo');
+      if (smallVideo) smallVideo.play().catch(() => {});
+    }
+
     async function fetchWithTimeout(url, ms = 7000) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), ms);
@@ -1335,7 +1427,6 @@
         </div>
       `;
 
-      // Autoplay del video
       if (hasVideo) {
         const video = document.getElementById('prayerVideo');
         if (video) {
@@ -1347,29 +1438,12 @@
             });
           }
         }
-
-        // Botón de pantalla completa personalizado
         const btnFullscreen = document.getElementById('btnFullscreenVideo');
         if (btnFullscreen) {
           btnFullscreen.addEventListener('click', (e) => {
             e.stopPropagation();
             haptic('medium');
-            const vid = document.getElementById('prayerVideo');
-            if (!vid) return;
-            if (vid.requestFullscreen) {
-              vid.requestFullscreen().catch((err) => {
-                console.warn('requestFullscreen falló, probando webkitEnterFullscreen:', err);
-                if (vid.webkitEnterFullscreen) vid.webkitEnterFullscreen();
-              });
-            } else if (vid.webkitEnterFullscreen) {
-              vid.webkitEnterFullscreen(); // iOS Safari
-            } else if (vid.webkitRequestFullscreen) {
-              vid.webkitRequestFullscreen();
-            } else if (vid.msRequestFullscreen) {
-              vid.msRequestFullscreen();
-            } else {
-              showToast('Pantalla completa no disponible en este dispositivo', 'info');
-            }
+            openVideoFullscreen(oracion.urlVideo);
           });
         }
       }
@@ -1439,6 +1513,11 @@
     }
 
     function closeDetail() {
+      // Cerrar cualquier video en pantalla completa que esté abierto
+      const fsOverlay = document.getElementById('videoFullscreenOverlay');
+      if (fsOverlay && fsOverlay.classList.contains('show')) {
+        closeVideoFullscreen();
+      }
       if (TG?.BackButton) {
         try { TG.BackButton.hide(); } catch {}
       }
@@ -1497,6 +1576,15 @@
         try {
           TG.BackButton.onClick(() => { haptic('light'); closeDetail(); });
         } catch {}
+      }
+
+      // Listener del botón cerrar pantalla completa
+      const btnCloseFullscreen = document.getElementById('btnCloseFullscreen');
+      if (btnCloseFullscreen) {
+        btnCloseFullscreen.addEventListener('click', () => {
+          haptic('light');
+          closeVideoFullscreen();
+        });
       }
 
       $('#btnFavorite').addEventListener('click', () => {
