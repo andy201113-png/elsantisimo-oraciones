@@ -7,23 +7,16 @@
   <title>El Santísimo - Oraciones</title>
   <meta name="description" content="Oraciones católicas, liturgia diaria y tesoros de fe." />
 
-  <!-- Telegram Web Apps SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- Google Fonts -->
+  <!-- ✅ MONETAG SDK (Zone ID: 11945696) -->
+  <script src='//libtl.com/sdk.js' data-zone='11945696' data-sdk='show_11945696'></script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!--
-    ⚠️ MONETAG SDK - Reemplaza TU_ZONE_ID por tu Zone ID real cuando lo tengas.
-    <script src="https://TU_DOMINIO_MONETAG/sdk.js"
-            data-zone="TU_ZONE_ID"
-            data-sdk="show_TU_ZONE_ID"></script>
-  -->
-
   <style>
-    /* ============ RESET Y BASE ============ */
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body {
       margin: 0; padding: 0;
@@ -36,19 +29,13 @@
       user-select: none;
       -webkit-font-smoothing: antialiased;
     }
-    body.dark {
-      background: #1e2a1e;
-      color: #f0ece6;
-    }
+    body.dark { background: #1e2a1e; color: #f0ece6; }
     h1, h2, h3, h4 { margin: 0; line-height: 1.3; }
     button { font-family: inherit; cursor: pointer; border: none; background: none; }
     img { display: block; max-width: 100%; }
 
-    /* ============ FUENTES LITÚRGICAS ============ */
     .font-cinzel { font-family: 'Cinzel', serif; }
-    .font-garamond { font-family: 'Cormorant Garamond', Georgia, serif; }
 
-    /* ============ VARIABLES DE TEMA ============ */
     :root {
       --bg-primary: #f5f2eb;
       --bg-card: #ffffff;
@@ -80,81 +67,97 @@
       --success-bg: #1d432b;
     }
 
-    /* ============ CONTENEDOR PRINCIPAL ============ */
+    /* ============ TAMAÑOS DE FUENTE ============ */
+    html.font-small { font-size: 17px; }
+    html.font-normal { font-size: 20px; }
+    html.font-large { font-size: 23px; }
+    html.font-xlarge { font-size: 26px; }
+
+    html.font-small .prayer-content { font-size: 20px; }
+    html.font-large .prayer-content { font-size: 27px; }
+    html.font-xlarge .prayer-content { font-size: 30px; }
+
+    html.font-small .detail-title { font-size: 23px; }
+    html.font-large .detail-title { font-size: 30px; }
+    html.font-xlarge .detail-title { font-size: 33px; }
+
+    html.font-small .featured-title { font-size: 17px; }
+    html.font-large .featured-title { font-size: 22px; }
+    html.font-xlarge .featured-title { font-size: 24px; }
+
+    html.font-small .btn { font-size: 16px; min-height: 56px; }
+    html.font-large .btn { font-size: 20px; min-height: 66px; }
+    html.font-xlarge .btn { font-size: 22px; min-height: 70px; }
+
+    html.font-small .nav-btn span { font-size: 13px; }
+    html.font-large .nav-btn span { font-size: 17px; }
+    html.font-xlarge .nav-btn span { font-size: 19px; }
+
+    .font-level-indicator {
+      position: fixed; top: 90px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent-gold); color: #fff;
+      padding: 12px 22px; border-radius: 22px;
+      font-size: 16px; font-weight: 800;
+      z-index: 300; opacity: 0; transition: opacity 0.3s;
+      pointer-events: none;
+      box-shadow: 0 4px 14px rgba(168, 118, 46, 0.4);
+    }
+    .font-level-indicator.show { opacity: 1; }
+
     .app-container {
-      max-width: 480px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding-bottom: 120px;
+      max-width: 480px; margin: 0 auto;
+      min-height: 100vh; padding-bottom: 120px;
       position: relative;
     }
 
-    /* ============ HEADER ============ */
     .app-header {
       background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-primary) 100%);
       border-bottom: 1px solid var(--border-gold);
-      padding: 18px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      backdrop-filter: blur(8px);
+      padding: 18px 16px; position: sticky; top: 0;
+      z-index: 30; backdrop-filter: blur(8px);
     }
     .app-header h1 {
       font-family: 'Cinzel', serif;
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 24px; font-weight: 800;
       color: var(--text-primary);
       letter-spacing: 0.02em;
     }
     .app-header p {
-      font-size: 14px;
-      color: var(--accent-gold);
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      margin-top: 3px;
-      font-weight: 700;
+      font-size: 14px; color: var(--accent-gold);
+      text-transform: uppercase; letter-spacing: 1.2px;
+      margin-top: 3px; font-weight: 700;
     }
+    .btn-font {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 900; background: var(--bg-card-alt);
+      border: 1.5px solid var(--border-gold);
+      color: var(--text-primary); transition: all 0.15s;
+    }
+    .btn-font:active { transform: scale(0.92); background: var(--accent-gold); color: #fff; }
+    .btn-font.smaller { font-size: 13px; }
+    .btn-font.bigger { font-size: 18px; }
 
-    /* ============ BOTTOM NAVIGATION ============ */
     .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
+      position: fixed; bottom: 0; left: 0; right: 0;
       background: var(--bg-card);
       border-top: 2px solid var(--border-gold);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
+      display: flex; justify-content: space-around; align-items: center;
       padding: 10px 0 max(14px, env(safe-area-inset-bottom, 14px));
-      z-index: 40;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-      max-width: 480px;
-      margin: 0 auto;
+      z-index: 40; box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+      max-width: 480px; margin: 0 auto;
     }
     .nav-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 6px 4px;
-      color: var(--text-muted);
-      transition: all 0.2s;
-      border-radius: 12px;
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 4px; padding: 6px 4px;
+      color: var(--text-muted); transition: all 0.2s; border-radius: 12px;
     }
     .nav-btn.active { color: var(--accent-gold); }
-    .nav-btn svg {
-      width: 32px;
-      height: 32px;
-      stroke-width: 2.2;
-      transition: transform 0.2s;
-    }
+    .nav-btn svg { width: 32px; height: 32px; stroke-width: 2.2; transition: transform 0.2s; }
     .nav-btn.active svg { transform: scale(1.12); stroke-width: 2.6; }
-    .nav-btn span {
-      font-size: 15px;
-      font-weight: 700;
-    }
+    .nav-btn span { font-size: 15px; font-weight: 700; }
 
-    /* ============ VISTAS ============ */
     .view { display: none; padding: 18px 16px 20px; animation: fadeIn 0.25s ease; }
     .view.active { display: block; }
     @keyframes fadeIn {
@@ -162,63 +165,40 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ============ TARJETAS ============ */
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-gold);
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-      margin-bottom: 18px;
+      background: var(--bg-card); border: 1px solid var(--border-gold);
+      border-radius: 18px; padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05); margin-bottom: 18px;
     }
 
-    /* Tarjeta destacada cliqueable */
     .featured-card {
-      cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
       -webkit-tap-highlight-color: transparent;
     }
     .featured-card:active {
       transform: scale(0.98);
       box-shadow: 0 6px 20px rgba(168, 118, 46, 0.35);
     }
-    .featured-card .featured-img-wrap {
-      position: relative;
-      height: 160px;
-      overflow: hidden;
-    }
+    .featured-card .featured-img-wrap { position: relative; height: 160px; overflow: hidden; }
     .featured-card .featured-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.4s;
+      width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s;
     }
     .featured-card:active .featured-img-wrap img { transform: scale(1.05); }
     .featured-card .featured-content { padding: 16px; }
     .featured-card .featured-title {
-      font-family: 'Cinzel', serif;
-      font-size: 19px;
-      font-weight: 800;
-      color: var(--text-primary);
-      line-height: 1.3;
-      margin-bottom: 8px;
+      font-family: 'Cinzel', serif; font-size: 19px; font-weight: 800;
+      color: var(--text-primary); line-height: 1.3; margin-bottom: 8px;
     }
     .featured-card .featured-excerpt {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 12px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      font-size: 16px; color: var(--text-secondary);
+      line-height: 1.5; margin-bottom: 12px;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
     }
 
-    /* Indicador de scroll */
     .scroll-hint {
-      text-align: center;
-      padding: 12px 0 6px;
-      color: var(--text-muted);
-      font-size: 15px;
-      font-weight: 700;
+      text-align: center; padding: 12px 0 6px;
+      color: var(--text-muted); font-size: 15px; font-weight: 700;
       animation: bounceHint 2s infinite;
     }
     @keyframes bounceHint {
@@ -226,95 +206,56 @@
       50% { transform: translateY(5px); }
     }
 
-    /* ============ BOTONES ============ */
     .btn {
-      min-height: 60px;
-      padding: 16px 24px;
-      font-size: 18px;
-      font-weight: 800;
-      border-radius: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      transition: all 0.15s;
-      text-align: center;
-      line-height: 1.2;
+      min-height: 60px; padding: 16px 24px;
+      font-size: 18px; font-weight: 800; border-radius: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 10px; transition: all 0.15s; text-align: center; line-height: 1.2;
     }
     .btn:active { transform: scale(0.97); }
     .btn-primary {
       background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-light) 100%);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(168, 118, 46, 0.35);
+      color: #ffffff; box-shadow: 0 4px 14px rgba(168, 118, 46, 0.35);
       width: 100%;
     }
     .btn-primary:hover { box-shadow: 0 6px 20px rgba(168, 118, 46, 0.5); }
     .btn-secondary {
-      background: transparent;
-      color: var(--text-primary);
-      border: 2.5px solid var(--border-gold);
-      width: 100%;
+      background: transparent; color: var(--text-primary);
+      border: 2.5px solid var(--border-gold); width: 100%;
     }
     .btn-secondary:hover { background: var(--bg-card-alt); }
     .btn-small {
-      min-height: 50px;
-      padding: 12px 18px;
-      font-size: 16px;
-      border-radius: 14px;
-      width: auto;
+      min-height: 50px; padding: 12px 18px;
+      font-size: 16px; border-radius: 14px; width: auto;
     }
     .btn-icon {
-      width: 52px;
-      height: 52px;
-      min-height: unset;
-      padding: 0;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      width: 52px; height: 52px; min-height: unset;
+      padding: 0; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
     }
     .btn-icon svg { width: 24px; height: 24px; }
 
-    /* ============ BADGES ============ */
     .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 14px;
-      font-weight: 800;
-      padding: 5px 10px;
-      border-radius: 8px;
-      line-height: 1.2;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 14px; font-weight: 800; padding: 5px 10px;
+      border-radius: 8px; line-height: 1.2;
     }
     .badge-gold {
-      background: rgba(168, 118, 46, 0.18);
-      color: var(--accent-gold);
+      background: rgba(168, 118, 46, 0.18); color: var(--accent-gold);
       border: 1.5px solid var(--border-gold);
     }
     .badge-success {
-      background: var(--success-bg);
-      color: var(--success);
+      background: var(--success-bg); color: var(--success);
       border: 1.5px solid rgba(31, 102, 52, 0.4);
     }
-    .badge-lock {
-      background: rgba(0,0,0,0.8);
-      color: #f5d484;
-      border: 1.5px solid rgba(245, 212, 132, 0.5);
-    }
 
-    /* ============ INPUT BÚSQUEDA ============ */
     .search-input {
-      width: 100%;
-      min-height: 60px;
+      width: 100%; min-height: 60px;
       padding: 16px 20px 16px 52px;
-      font-size: 18px;
-      font-family: inherit;
-      background: var(--bg-card);
-      border: 2.5px solid var(--border-gold);
-      border-radius: 16px;
-      color: var(--text-primary);
-      outline: none;
-      transition: all 0.2s;
+      font-size: 18px; font-family: inherit;
+      background: var(--bg-card); border: 2.5px solid var(--border-gold);
+      border-radius: 16px; color: var(--text-primary);
+      outline: none; transition: all 0.2s;
     }
     .search-input:focus {
       border-color: var(--accent-gold);
@@ -322,368 +263,216 @@
     }
     .search-input::placeholder { color: var(--text-muted); }
 
-    /* ============ FILTROS (chips) ============ */
     .filter-chips {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
+      display: flex; gap: 8px; overflow-x: auto;
       padding: 6px 0 10px;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+      -ms-overflow-style: none; scrollbar-width: none;
     }
     .filter-chips::-webkit-scrollbar { display: none; }
     .chip {
-      padding: 10px 16px;
-      border-radius: 14px;
-      background: var(--bg-card);
-      border: 2px solid var(--border-subtle);
-      color: var(--text-secondary);
-      font-size: 16px;
-      font-weight: 700;
-      white-space: nowrap;
-      transition: all 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      padding: 10px 16px; border-radius: 14px;
+      background: var(--bg-card); border: 2px solid var(--border-subtle);
+      color: var(--text-secondary); font-size: 16px; font-weight: 700;
+      white-space: nowrap; transition: all 0.15s;
+      display: inline-flex; align-items: center; gap: 6px;
     }
     .chip.active {
-      background: var(--accent-gold);
-      border-color: var(--accent-gold);
+      background: var(--accent-gold); border-color: var(--accent-gold);
       color: #ffffff;
     }
 
-    /* ============ TARJETA ORACIÓN ============ */
     .prayer-card {
-      display: flex;
-      gap: 14px;
-      padding: 14px;
-      background: var(--bg-card);
-      border: 1.5px solid var(--border-gold);
-      border-radius: 18px;
-      margin-bottom: 14px;
-      align-items: flex-start;
-      transition: all 0.2s;
-      cursor: pointer;
-      position: relative;
+      display: flex; gap: 14px; padding: 14px;
+      background: var(--bg-card); border: 1.5px solid var(--border-gold);
+      border-radius: 18px; margin-bottom: 14px;
+      align-items: flex-start; transition: all 0.2s;
+      cursor: pointer; position: relative;
     }
     .prayer-card:active { transform: scale(0.99); }
     .prayer-thumb {
-      width: 96px;
-      height: 96px;
-      border-radius: 14px;
-      overflow: hidden;
-      flex-shrink: 0;
-      position: relative;
+      width: 96px; height: 96px; border-radius: 14px;
+      overflow: hidden; flex-shrink: 0; position: relative;
       background: var(--bg-card-alt);
     }
     .prayer-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .prayer-info { flex: 1; min-width: 0; }
     .prayer-title {
-      font-family: 'Cinzel', serif;
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text-primary);
-      line-height: 1.3;
-      margin-bottom: 5px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      font-family: 'Cinzel', serif; font-size: 18px; font-weight: 800;
+      color: var(--text-primary); line-height: 1.3; margin-bottom: 5px;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
     }
     .prayer-excerpt {
-      font-size: 16px;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-bottom: 8px;
+      font-size: 16px; color: var(--text-secondary); line-height: 1.5;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 8px;
     }
     .prayer-cta {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--accent-gold);
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+      font-size: 16px; font-weight: 800; color: var(--accent-gold);
+      display: inline-flex; align-items: center; gap: 4px;
     }
     .lock-overlay {
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: rgba(0,0,0,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       border-radius: 14px;
     }
     .lock-overlay svg { width: 34px; height: 34px; }
 
-    /* ============ LECTURAS ACORDEÓN ============ */
     .accordion {
-      border: 1.5px solid var(--border-gold);
-      border-radius: 16px;
-      margin-bottom: 12px;
-      overflow: hidden;
-      background: var(--bg-card);
+      border: 1.5px solid var(--border-gold); border-radius: 16px;
+      margin-bottom: 12px; overflow: hidden; background: var(--bg-card);
     }
     .accordion-header {
-      width: 100%;
-      padding: 18px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      text-align: left;
-      background: var(--bg-card);
-      transition: background 0.15s;
+      width: 100%; padding: 18px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      text-align: left; background: var(--bg-card); transition: background 0.15s;
     }
     .accordion-header:active { background: var(--bg-card-alt); }
     .accordion-title {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 18px; font-weight: 800; color: var(--text-primary);
+      display: flex; align-items: center; gap: 8px;
     }
     .accordion-ref {
-      font-size: 15px;
-      color: var(--accent-gold);
-      margin-top: 4px;
-      font-weight: 700;
+      font-size: 15px; color: var(--accent-gold);
+      margin-top: 4px; font-weight: 700;
     }
     .accordion-body {
-      display: none;
-      padding: 4px 18px 20px;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 21px;
-      line-height: 1.8;
-      color: var(--text-primary);
-      border-top: 1px solid var(--border-subtle);
-      padding-top: 16px;
+      display: none; padding: 4px 18px 20px;
+      font-family: 'Cormorant Garamond', serif; font-size: 21px;
+      line-height: 1.8; color: var(--text-primary);
+      border-top: 1px solid var(--border-subtle); padding-top: 16px;
     }
     .accordion.open .accordion-body { display: block; }
     .accordion-chevron { transition: transform 0.2s; color: var(--text-muted); width: 24px; height: 24px; }
     .accordion.open .accordion-chevron { transform: rotate(180deg); color: var(--accent-gold); }
 
-    /* ============ ESTADÍSTICAS ============ */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .stat-card {
-      background: var(--bg-card);
-      border: 1.5px solid var(--border-gold);
-      border-radius: 16px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      background: var(--bg-card); border: 1.5px solid var(--border-gold);
+      border-radius: 16px; padding: 16px;
+      display: flex; align-items: center; gap: 12px;
     }
     .stat-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
+      width: 52px; height: 52px; border-radius: 14px;
       background: rgba(168, 118, 46, 0.15);
       border: 1.5px solid var(--border-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-gold);
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-gold); flex-shrink: 0;
     }
     .stat-icon svg { width: 26px; height: 26px; }
     .stat-value {
-      font-size: 24px;
-      font-weight: 900;
-      color: var(--text-primary);
-      line-height: 1;
+      font-size: 24px; font-weight: 900;
+      color: var(--text-primary); line-height: 1;
     }
     .stat-label {
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-top: 4px;
-      font-weight: 600;
+      font-size: 14px; color: var(--text-muted);
+      margin-top: 4px; font-weight: 600;
     }
 
-    /* ============ MODALES ============ */
     .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.78);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeIn 0.2s;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.78); backdrop-filter: blur(4px);
+      z-index: 100; display: none;
+      align-items: center; justify-content: center;
+      padding: 20px; animation: fadeIn 0.2s;
     }
     .modal-backdrop.show { display: flex; }
     .modal {
-      background: var(--bg-card);
-      border: 1.5px solid var(--border-gold);
-      border-radius: 22px;
-      max-width: 420px;
-      width: 100%;
-      padding: 28px 22px;
-      text-align: center;
+      background: var(--bg-card); border: 1.5px solid var(--border-gold);
+      border-radius: 22px; max-width: 420px; width: 100%;
+      padding: 28px 22px; text-align: center;
       box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-      animation: slideUp 0.25s ease;
-      max-height: 90vh;
-      overflow-y: auto;
+      animation: slideUp 0.25s ease; max-height: 90vh; overflow-y: auto;
     }
     @keyframes slideUp {
       from { transform: translateY(30px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
     .modal-icon {
-      width: 84px;
-      height: 84px;
-      border-radius: 50%;
+      width: 84px; height: 84px; border-radius: 50%;
       background: rgba(168, 118, 46, 0.15);
       border: 2.5px solid var(--border-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 18px;
-      color: var(--accent-gold);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 18px; color: var(--accent-gold);
     }
     .modal-icon svg { width: 42px; height: 42px; }
     .modal h2 {
-      font-family: 'Cinzel', serif;
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 14px;
+      font-family: 'Cinzel', serif; font-size: 24px; font-weight: 800;
+      color: var(--text-primary); margin-bottom: 14px;
     }
     .modal p {
-      font-size: 18px;
-      line-height: 1.55;
-      color: var(--text-secondary);
-      margin-bottom: 22px;
+      font-size: 18px; line-height: 1.55;
+      color: var(--text-secondary); margin-bottom: 22px;
     }
     .modal-buttons { display: flex; flex-direction: column; gap: 10px; }
 
-    /* ============ TOAST ============ */
     .toast {
-      position: fixed;
-      top: 24px;
-      left: 50%;
+      position: fixed; top: 24px; left: 50%;
       transform: translateX(-50%) translateY(-150%);
-      background: var(--bg-card);
-      border: 2.5px solid var(--border-gold);
-      border-radius: 16px;
-      padding: 16px 24px;
-      font-size: 17px;
-      font-weight: 800;
-      color: var(--text-primary);
-      z-index: 200;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      max-width: 90vw;
-      transition: transform 0.3s ease;
+      background: var(--bg-card); border: 2.5px solid var(--border-gold);
+      border-radius: 16px; padding: 16px 24px;
+      font-size: 17px; font-weight: 800; color: var(--text-primary);
+      z-index: 200; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      display: flex; align-items: center; gap: 10px;
+      max-width: 90vw; transition: transform 0.3s ease;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
 
-    /* ============ VISTA DETALLE ============ */
     .detail-view {
-      position: fixed;
-      inset: 0;
-      background: var(--bg-primary);
-      z-index: 60;
-      overflow-y: auto;
-      display: none;
-      padding-bottom: 40px;
+      position: fixed; inset: 0; background: var(--bg-primary);
+      z-index: 60; overflow-y: auto; display: none; padding-bottom: 40px;
     }
     .detail-view.show { display: block; animation: fadeIn 0.25s; }
     .detail-header {
-      position: sticky;
-      top: 0;
-      background: var(--bg-card);
+      position: sticky; top: 0; background: var(--bg-card);
       border-bottom: 1.5px solid var(--border-gold);
       padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      z-index: 10;
-      max-width: 480px;
-      margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 10; max-width: 480px; margin: 0 auto;
     }
-    .detail-body {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 20px 16px;
-    }
+    .detail-body { max-width: 480px; margin: 0 auto; padding: 20px 16px; }
     .detail-cover {
-      width: 100%;
-      height: 220px;
-      border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      position: relative;
-      border: 1.5px solid var(--border-gold);
+      width: 100%; height: 220px; border-radius: 18px;
+      overflow: hidden; margin-bottom: 20px;
+      position: relative; border: 1.5px solid var(--border-gold);
     }
     .detail-cover img { width: 100%; height: 100%; object-fit: cover; }
     .detail-cover::after {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.5));
     }
     .detail-title {
-      font-family: 'Cinzel', serif;
-      font-size: 26px;
-      font-weight: 800;
-      color: var(--text-primary);
-      line-height: 1.25;
-      margin-bottom: 12px;
+      font-family: 'Cinzel', serif; font-size: 26px; font-weight: 800;
+      color: var(--text-primary); line-height: 1.25; margin-bottom: 12px;
     }
     .detail-excerpt {
-      font-size: 18px;
-      font-style: italic;
+      font-size: 18px; font-style: italic;
       color: var(--text-secondary);
       border-left: 4px solid var(--accent-gold);
-      padding-left: 14px;
-      margin-bottom: 22px;
-      line-height: 1.55;
+      padding-left: 14px; margin-bottom: 22px; line-height: 1.55;
     }
     .prayer-content {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 23px;
-      line-height: 1.85;
-      color: var(--text-primary);
+      font-family: 'Cormorant Garamond', serif; font-size: 23px;
+      line-height: 1.85; color: var(--text-primary);
     }
-    .prayer-content h1,
-    .prayer-content h2,
-    .prayer-content h3 {
-      font-family: 'Cinzel', serif;
-      margin-top: 24px;
-      margin-bottom: 12px;
-      line-height: 1.3;
-      color: var(--text-primary);
+    .prayer-content h1, .prayer-content h2, .prayer-content h3 {
+      font-family: 'Cinzel', serif; margin-top: 24px;
+      margin-bottom: 12px; line-height: 1.3; color: var(--text-primary);
     }
     .prayer-content h2 { font-size: 23px; color: var(--accent-gold); }
     .prayer-content p { margin-bottom: 20px; }
     .prayer-content blockquote {
       border-left: 4px solid var(--accent-gold);
-      padding-left: 18px;
-      margin: 22px 0;
-      font-style: italic;
-      color: var(--accent-gold);
+      padding-left: 18px; margin: 22px 0;
+      font-style: italic; color: var(--accent-gold);
     }
     .prayer-content div[style*="background-color"] {
-      border-radius: 12px;
-      padding: 16px !important;
+      border-radius: 12px; padding: 16px !important;
     }
 
-    /* ============ UTILIDADES ============ */
     .text-center { text-align: center; }
     .text-muted { color: var(--text-muted); }
-    .text-gold { color: var(--accent-gold); }
     .mt-2 { margin-top: 8px; }
     .mt-3 { margin-top: 14px; }
     .mt-4 { margin-top: 20px; }
@@ -693,59 +482,51 @@
     .skeleton {
       background: linear-gradient(90deg, var(--bg-card-alt) 25%, rgba(168,118,46,0.15) 50%, var(--bg-card-alt) 75%);
       background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 14px;
+      animation: shimmer 1.5s infinite; border-radius: 14px;
     }
     @keyframes shimmer {
       0% { background-position: -200% 0; }
       100% { background-position: 200% 0; }
     }
-
-    /* Video */
     .video-wrapper {
-      border-radius: 16px;
-      overflow: hidden;
+      border-radius: 16px; overflow: hidden;
       border: 1.5px solid var(--border-gold);
-      margin-bottom: 22px;
-      background: #000;
+      margin-bottom: 22px; background: #000;
     }
     .video-wrapper video {
-      width: 100%;
-      max-height: 300px;
-      display: block;
+      width: 100%; max-height: 300px; display: block;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ============ APP CONTAINER ============ -->
   <div class="app-container">
 
-    <!-- ============ HEADER ============ -->
     <header class="app-header" id="appHeader">
-      <div style="display:flex; align-items:center; justify-content:space-between;">
-        <div>
-          <h1 id="headerTitle">El Santísimo</h1>
-          <p id="headerSubtitle">Oraciones y Liturgia</p>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap: 8px;">
+        <div style="min-width: 0; flex: 1;">
+          <h1 id="headerTitle" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">El Santísimo</h1>
+          <p id="headerSubtitle" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Oraciones y Liturgia</p>
         </div>
-        <button id="btnRefresh" class="btn btn-icon" style="background: var(--bg-card-alt); border: 1px solid var(--border-gold);" title="Actualizar">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-gold);">
-            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-            <path d="M3 3v5h5"/>
-            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
-            <path d="M16 16h5v5"/>
-          </svg>
-        </button>
+        <div style="display:flex; gap:6px; align-items:center; flex-shrink: 0;">
+          <button id="btnFontSmaller" class="btn-font smaller" title="Letra más pequeña">A-</button>
+          <button id="btnFontBigger" class="btn-font bigger" title="Letra más grande">A+</button>
+          <button id="btnRefresh" class="btn btn-icon" style="width: 44px; height: 44px; background: var(--bg-card-alt); border: 1.5px solid var(--border-gold);" title="Actualizar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-gold);">
+              <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+              <path d="M16 16h5v5"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
 
-    <!-- ============ VISTA INICIO ============ -->
     <section class="view active" id="view-inicio">
-      <!-- Oración destacada (cliqueable) -->
       <div id="featuredPrayerContainer"></div>
 
-      <!-- Racha y Tesoros compactos -->
       <div class="stats-grid mb-4" style="gap: 10px;">
         <div class="stat-card" style="padding: 14px;">
           <div class="stat-icon" style="width: 48px; height: 48px;">
@@ -758,7 +539,6 @@
             <div class="stat-label" style="font-size: 14px;">Días de racha</div>
           </div>
         </div>
-
         <div class="stat-card" style="padding: 14px;">
           <div class="stat-icon" style="width: 48px; height: 48px; background: var(--success-bg); border-color: rgba(31,102,52,0.4); color: var(--success);">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -774,7 +554,6 @@
         </div>
       </div>
 
-      <!-- Botón: desbloquear tesoro extra -->
       <button id="btnExtraTreasure" class="btn btn-secondary mb-3" style="border-color: var(--accent-gold); color: var(--accent-gold); min-height: 52px; font-size: 16px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="23 7 16 12 23 17 23 7"/>
@@ -783,12 +562,10 @@
         Ver video y ganar tesoro extra
       </button>
 
-      <!-- Indicador de scroll -->
       <div class="scroll-hint">
         <span>▼ Desliza para ver las Lecturas del Día</span>
       </div>
 
-      <!-- Lecturas del día -->
       <h2 style="font-family:'Cinzel',serif; font-size:20px; font-weight:800; margin-bottom:14px; color: var(--text-primary); display:flex; align-items:center; gap:10px; margin-top: 12px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-gold);">
           <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
@@ -798,7 +575,6 @@
       <div id="readingsContainer"></div>
     </section>
 
-    <!-- ============ VISTA ORACIONES ============ -->
     <section class="view" id="view-oraciones">
       <div style="position: relative; margin-bottom: 14px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted); position: absolute; left: 18px; top: 50%; transform: translateY(-50%); pointer-events: none;">
@@ -818,7 +594,6 @@
       <div id="prayersListContainer"></div>
     </section>
 
-    <!-- ============ VISTA PERFIL ============ -->
     <section class="view" id="view-perfil">
       <div class="card text-center mb-4">
         <div style="width: 92px; height: 92px; border-radius: 50%; margin: 0 auto 14px; background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dark) 100%); display: flex; align-items: center; justify-content: center; font-size: 38px; font-weight: 800; color: #fff; border: 4px solid var(--accent-gold-light); overflow: hidden;" id="userAvatar">
@@ -905,7 +680,6 @@
 
   </div>
 
-  <!-- ============ BOTTOM NAVIGATION ============ -->
   <nav class="bottom-nav">
     <button class="nav-btn active" data-tab="inicio">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -921,7 +695,6 @@
     </button>
   </nav>
 
-  <!-- ============ VISTA DETALLE ORACIÓN ============ -->
   <div class="detail-view" id="detailView">
     <div class="detail-header">
       <button class="btn btn-small" id="btnBackDetail" style="background: var(--bg-card-alt); border: 1.5px solid var(--border-gold); color: var(--text-primary);">
@@ -940,7 +713,6 @@
     <div class="detail-body" id="detailBody"></div>
   </div>
 
-  <!-- ============ MODAL: DESBLOQUEAR TESORO ============ -->
   <div class="modal-backdrop" id="modalTreasure">
     <div class="modal">
       <div class="modal-icon">
@@ -961,7 +733,7 @@
     </div>
   </div>
 
-  <!-- ============ OVERLAY DE ANUNCIO SIMULADO ============ -->
+  <!-- Overlay de anuncio SIMULADO (solo se usa si el SDK de Monetag no está cargado) -->
   <div class="modal-backdrop" id="adOverlay" style="background: rgba(0,0,0,0.92); z-index: 150;">
     <div class="modal" style="background: linear-gradient(135deg, #1e2a1e 0%, #2d402d 100%); color: #f0ece6; border-color: #c9a05e;">
       <div class="modal-icon" style="background: rgba(223,186,119,0.2); border-color: #dfba77; color: #dfba77;">
@@ -984,20 +756,19 @@
     </div>
   </div>
 
-  <!-- ============ TOAST ============ -->
   <div class="toast" id="toast"></div>
+  <div class="font-level-indicator" id="fontIndicator">Letra: Normal</div>
 
-  <!-- ============ JAVASCRIPT ============ -->
   <script>
     'use strict';
 
-    /* =========================================================
-       1. CONFIGURACIÓN
-       ========================================================= */
     const CONFIG = {
       API_ORACIONES: 'https://oraciones-api.vercel.app/oraciones.json',
       API_LECTURAS: 'https://oraciones-api.vercel.app/lecturas.json',
-      MONETAG_MAIN_ZONE_ID: 'TU_ZONE_ID',
+
+      // ✅ MONETAG ZONE ID
+      MONETAG_ZONE_ID: '11945696',
+
       AD_FREE_DURATION_MS: 60 * 60 * 1000,
       INTERSTITIAL_MIN_INTERVAL_MS: 10 * 60 * 1000,
       BACK_AD_MIN_INTERVAL_MS: 5 * 60 * 1000,
@@ -1006,27 +777,14 @@
       CACHE_TTL_MS: 24 * 60 * 60 * 1000,
     };
 
-    /* =========================================================
-       2. ESTADO GLOBAL
-       ========================================================= */
     const state = {
-      oraciones: [],
-      lecturas: [],
-      currentTab: 'inicio',
-      currentFilter: 'todas',
-      searchQuery: '',
-      selectedPrayer: null,
-      pendingTreasurePrayer: null,
-      adOverlayCallback: null,
-      interstitialShownThisSession: false,
-      favorites: [],
-      readPrayers: [],
-      unlockedTreasurePrayers: [],
+      oraciones: [], lecturas: [],
+      currentTab: 'inicio', currentFilter: 'todas', searchQuery: '',
+      selectedPrayer: null, pendingTreasurePrayer: null,
+      adOverlayCallback: null, interstitialShownThisSession: false,
+      favorites: [], readPrayers: [], unlockedTreasurePrayers: [],
     };
 
-    /* =========================================================
-       3. UTILIDADES
-       ========================================================= */
     const $ = (sel) => document.querySelector(sel);
     const $$ = (sel) => document.querySelectorAll(sel);
 
@@ -1053,9 +811,6 @@
       haptic('light');
     }
 
-    /* =========================================================
-       4. STORAGE
-       ========================================================= */
     const STORAGE_KEYS = {
       STREAK: 'elsantisimo_streak',
       LAST_ACCESS: 'elsantisimo_last_access',
@@ -1070,6 +825,7 @@
       BACK_PRESS_COUNT: 'elsantisimo_back_press_count',
       LAST_BACK_AD: 'elsantisimo_last_back_ad',
       THEME: 'elsantisimo_theme',
+      FONT_SIZE: 'elsantisimo_font_size',
       CACHE_ORACIONES: 'elsantisimo_cache_oraciones',
       CACHE_LECTURAS: 'elsantisimo_cache_lecturas',
     };
@@ -1086,28 +842,60 @@
       },
     };
 
-    /* -------- Racha -------- */
+    /* ============ TAMAÑO DE FUENTE ============ */
+    const FONT_LEVELS = ['small', 'normal', 'large', 'xlarge'];
+    const FONT_LABELS = { small: 'Pequeña', normal: 'Normal', large: 'Grande', xlarge: 'Extra grande' };
+
+    function applyFontSize(level) {
+      document.documentElement.classList.remove('font-small', 'font-normal', 'font-large', 'font-xlarge');
+      document.documentElement.classList.add('font-' + level);
+      Storage.set(STORAGE_KEYS.FONT_SIZE, level);
+    }
+
+    function getCurrentFontSize() {
+      return Storage.get(STORAGE_KEYS.FONT_SIZE, 'normal');
+    }
+
+    function changeFontSize(direction) {
+      const current = getCurrentFontSize();
+      const idx = FONT_LEVELS.indexOf(current);
+      let newIdx = idx;
+      if (direction === 'bigger' && idx < FONT_LEVELS.length - 1) newIdx = idx + 1;
+      if (direction === 'smaller' && idx > 0) newIdx = idx - 1;
+
+      if (newIdx === idx) {
+        haptic('medium');
+        showToast(direction === 'bigger' ? 'Ya es el tamaño máximo' : 'Ya es el tamaño mínimo', 'info');
+        return;
+      }
+
+      const newLevel = FONT_LEVELS[newIdx];
+      applyFontSize(newLevel);
+      haptic('light');
+
+      const indicator = $('#fontIndicator');
+      if (indicator) {
+        indicator.textContent = `Letra: ${FONT_LABELS[newLevel]}`;
+        indicator.classList.add('show');
+        clearTimeout(window.__fontTimer);
+        window.__fontTimer = setTimeout(() => indicator.classList.remove('show'), 1500);
+      }
+    }
+
+    /* ============ UTILIDADES ============ */
     function updateStreak() {
       const today = getLocalDateString();
       const last = Storage.get(STORAGE_KEYS.LAST_ACCESS);
       let streak = Storage.get(STORAGE_KEYS.STREAK, 0);
-
-      if (!last) {
-        streak = 1;
-      } else if (last === today) {
-        streak = Math.max(1, streak);
-      } else if (daysDiff(last, today) === 1) {
-        streak = streak + 1;
-      } else {
-        streak = 1;
-      }
-
+      if (!last) { streak = 1; }
+      else if (last === today) { streak = Math.max(1, streak); }
+      else if (daysDiff(last, today) === 1) { streak = streak + 1; }
+      else { streak = 1; }
       Storage.set(STORAGE_KEYS.STREAK, streak);
       Storage.set(STORAGE_KEYS.LAST_ACCESS, today);
       return streak;
     }
 
-    /* -------- Tesoros -------- */
     function getTreasuresToday() {
       const today = getLocalDateString();
       const savedDate = Storage.get(STORAGE_KEYS.TREASURES_DATE);
@@ -1119,16 +907,12 @@
       return Storage.get(STORAGE_KEYS.TREASURES_TODAY, 0);
     }
 
-    function getTotalTreasures() {
-      return Storage.get(STORAGE_KEYS.TREASURES_TOTAL, 0);
-    }
+    function getTotalTreasures() { return Storage.get(STORAGE_KEYS.TREASURES_TOTAL, 0); }
 
     function addTreasure(allowExceed = false) {
       const today = getLocalDateString();
       let current = getTreasuresToday();
-      if (current >= CONFIG.MAX_DAILY_TREASURES && !allowExceed) {
-        return { success: false, current };
-      }
+      if (current >= CONFIG.MAX_DAILY_TREASURES && !allowExceed) return { success: false, current };
       current += 1;
       Storage.set(STORAGE_KEYS.TREASURES_DATE, today);
       Storage.set(STORAGE_KEYS.TREASURES_TODAY, current);
@@ -1136,7 +920,6 @@
       return { success: true, current };
     }
 
-    /* -------- Favoritos -------- */
     function getFavorites() { return Storage.get(STORAGE_KEYS.FAVORITES, []); }
     function isFavorite(id) { return getFavorites().includes(id); }
     function toggleFavorite(id) {
@@ -1147,7 +930,6 @@
       return updated.includes(id);
     }
 
-    /* -------- Oraciones leídas -------- */
     function getReadPrayers() { return Storage.get(STORAGE_KEYS.READ_PRAYERS, []); }
     function markPrayerAsRead(id) {
       const list = getReadPrayers();
@@ -1158,7 +940,6 @@
       }
     }
 
-    /* -------- Tesoros desbloqueados -------- */
     function getUnlockedTreasures() { return Storage.get(STORAGE_KEYS.UNLOCKED_TREASURES, []); }
     function isTreasureUnlocked(id) { return getUnlockedTreasures().includes(id); }
     function unlockTreasure(id) {
@@ -1170,7 +951,6 @@
       }
     }
 
-    /* -------- Modo sin anuncios -------- */
     function getAdFreeStatus() {
       const until = Storage.get(STORAGE_KEYS.AD_FREE_UNTIL, 0);
       const now = Date.now();
@@ -1183,7 +963,6 @@
       Storage.set(STORAGE_KEYS.AD_FREE_UNTIL, Date.now() + CONFIG.AD_FREE_DURATION_MS);
     }
 
-    /* -------- Caché API -------- */
     function getCache(key) {
       const cached = Storage.get(key);
       if (!cached) return null;
@@ -1194,9 +973,7 @@
       Storage.set(key, { timestamp: Date.now(), data });
     }
 
-    /* =========================================================
-       5. TELEGRAM SDK
-       ========================================================= */
+    /* ============ TELEGRAM ============ */
     const TG = window.Telegram?.WebApp || null;
 
     function initTelegram() {
@@ -1245,9 +1022,67 @@
     }
 
     /* =========================================================
-       6. ANUNCIOS
+       MONETAG - ANUNCIOS REALES
+       =========================================================
+       Formatos según la documentación oficial:
+       - Rewarded Interstitial: show_ZONE_ID().then(...)
+       - Rewarded Popup:        show_ZONE_ID('pop').then(...)
+       - In-App Interstitial:   show_ZONE_ID({ type: 'inApp', inAppSettings: {...} })
        ========================================================= */
-    function showAd(type, onReward) {
+    async function showAd(type, onReward) {
+      const sdkFn = window['show_' + CONFIG.MONETAG_ZONE_ID];
+
+      // Si el SDK de Monetag no está cargado (o falla), usar simulación
+      if (typeof sdkFn !== 'function') {
+        console.warn('[Monetag] SDK no disponible. Usando modo simulado.');
+        showSimulatedAd(type, onReward);
+        return;
+      }
+
+      console.log(`[Monetag] Mostrando anuncio tipo: ${type}`);
+
+      try {
+        if (type === 'popup') {
+          // ✅ Rewarded Popup (para "Sin anuncios por 1 hora")
+          await sdkFn('pop');
+          console.log('[Monetag] Rewarded Popup completado');
+          hapticNotify('success');
+          if (onReward) onReward();
+
+        } else if (type === 'interstitial') {
+          // ✅ In-App Interstitial (para el anuncio al pulsar atrás)
+          await sdkFn({
+            type: 'inApp',
+            inAppSettings: {
+              frequency: 1,
+              capping: 1,
+              interval: 0,
+              timeout: 0,
+              everyPage: false,
+            }
+          });
+          console.log('[Monetag] In-App Interstitial completado');
+          if (onReward) onReward();
+
+        } else {
+          // ✅ Rewarded Interstitial (para desbloquear tesoros y ganar tesoro extra)
+          await sdkFn();
+          console.log('[Monetag] Rewarded Interstitial completado');
+          hapticNotify('success');
+          if (onReward) onReward();
+        }
+      } catch (error) {
+        console.warn('[Monetag] Anuncio no completado:', error);
+        // No dar recompensa si el usuario cerró el anuncio antes de terminar
+        showToast('Anuncio cerrado antes de terminar', 'info');
+      }
+    }
+
+    /**
+     * Modo simulado: contador de 15 segundos.
+     * Se usa automáticamente si el SDK de Monetag no está cargado (por ejemplo, en localhost).
+     */
+    function showSimulatedAd(type, onReward) {
       const overlay = $('#adOverlay');
       const bar = $('#adProgressBar');
       const countdownEl = $('#adCountdown');
@@ -1259,9 +1094,7 @@
       countdownEl.textContent = count;
       closeBtn.style.display = 'none';
 
-      state.adOverlayCallback = () => {
-        if (onReward) onReward();
-      };
+      state.adOverlayCallback = () => { if (onReward) onReward(); };
 
       const timer = setInterval(() => {
         count -= 1;
@@ -1283,50 +1116,25 @@
       };
     }
 
-    function showInterstitialDiscreto() {
-      const { isAdFree } = getAdFreeStatus();
-      if (isAdFree) return;
-      if (state.interstitialShownThisSession) return;
-      const last = Storage.get(STORAGE_KEYS.LAST_INAPP_AD, 0);
-      if (Date.now() - last < CONFIG.INTERSTITIAL_MIN_INTERVAL_MS) return;
-      Storage.set(STORAGE_KEYS.LAST_INAPP_AD, Date.now());
-      state.interstitialShownThisSession = true;
-      setTimeout(() => showAd('interstitial'), 500);
-    }
-
-    /**
-     * Anuncio discreto al pulsar ATRÁS.
-     * Reglas anti-saturación:
-     *  - Solo cada 3 back presses
-     *  - Mínimo 5 minutos entre anuncios de back
-     *  - No si hay pase sin anuncios activo
-     *  - No si acaba de ver un rewarded (últimos 30 segundos)
-     */
     function maybeShowBackAd() {
       const { isAdFree } = getAdFreeStatus();
       if (isAdFree) return;
-
       const lastInapp = Storage.get(STORAGE_KEYS.LAST_INAPP_AD, 0);
       if (Date.now() - lastInapp < 30 * 1000) return;
-
       const lastBackAd = Storage.get(STORAGE_KEYS.LAST_BACK_AD, 0);
       if (Date.now() - lastBackAd < CONFIG.BACK_AD_MIN_INTERVAL_MS) return;
-
       let count = Storage.get(STORAGE_KEYS.BACK_PRESS_COUNT, 0) + 1;
       if (count < CONFIG.BACK_AD_EVERY_N) {
         Storage.set(STORAGE_KEYS.BACK_PRESS_COUNT, count);
         return;
       }
-
       Storage.set(STORAGE_KEYS.BACK_PRESS_COUNT, 0);
       Storage.set(STORAGE_KEYS.LAST_BACK_AD, Date.now());
       Storage.set(STORAGE_KEYS.LAST_INAPP_AD, Date.now());
       setTimeout(() => showAd('interstitial'), 400);
     }
 
-    /* =========================================================
-       7. API
-       ========================================================= */
+    /* ============ API ============ */
     async function fetchWithTimeout(url, ms = 7000) {
       const ctrl = new AbortController();
       const t = setTimeout(() => ctrl.abort(), ms);
@@ -1367,11 +1175,7 @@
       }
     }
 
-    /* =========================================================
-       8. RENDERIZADO
-       ========================================================= */
-
-    /* -------- INICIO: Oración destacada (cliqueable) -------- */
+    /* ============ RENDER ============ */
     function renderFeatured() {
       const container = $('#featuredPrayerContainer');
       if (!state.oraciones.length) {
@@ -1381,12 +1185,9 @@
       const featured = state.oraciones.find(o => o.destacado && o.esTesoro)
                     || state.oraciones.find(o => o.destacado)
                     || state.oraciones[0];
-
       container.innerHTML = `
         <div class="card featured-card" style="padding: 0; overflow: hidden; margin-bottom: 18px;"
-             onclick="openPrayer(${featured.id})"
-             role="button"
-             tabindex="0">
+             onclick="openPrayer(${featured.id})" role="button" tabindex="0">
           <div class="featured-img-wrap">
             <img src="${featured.urlImagen}" alt="${featured.titulo}" loading="lazy"
               onerror="this.src='https://images.unsplash.com/photo-1548625361-195fe57876a3?w=800'">
@@ -1406,7 +1207,6 @@
       `;
     }
 
-    /* -------- INICIO: Estadísticas -------- */
     function renderStats() {
       $('#streakValue').textContent = Storage.get(STORAGE_KEYS.STREAK, 0);
       const t = getTreasuresToday();
@@ -1417,7 +1217,6 @@
       $('#profileFavorites').textContent = getFavorites().length;
     }
 
-    /* -------- INICIO: Lecturas -------- */
     function renderReadings() {
       const container = $('#readingsContainer');
       if (!state.lecturas.length) {
@@ -1425,14 +1224,12 @@
         return;
       }
       const l = state.lecturas[0];
-
       const sections = [
         { key: 'primera', titulo: 'Primera Lectura', ref: l.primera_lectura.referencia, texto: l.primera_lectura.texto, icon: '📖' },
         { key: 'salmo', titulo: 'Salmo Responsorial', ref: l.salmo.referencia, texto: l.salmo.texto, icon: '🎵' },
         { key: 'evangelio', titulo: 'Santo Evangelio', ref: l.evangelio.referencia, texto: l.evangelio.texto, icon: '✝️', destacado: true },
         { key: 'reflexion', titulo: 'Reflexión del Día', ref: l.reflexion.titulo, texto: l.reflexion.texto, icon: '🕊️' },
       ];
-
       container.innerHTML = `
         <div class="card" style="margin-bottom: 14px;">
           <div style="font-size: 14px; color: var(--accent-gold); text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 5px;">📅 ${l.fecha}</div>
@@ -1451,7 +1248,6 @@
           </div>
         `).join('')}
       `;
-
       $$('.accordion-header').forEach(btn => {
         btn.addEventListener('click', () => {
           haptic('light');
@@ -1460,23 +1256,18 @@
       });
     }
 
-    /* -------- LISTA DE ORACIONES -------- */
     function renderPrayersList() {
       const container = $('#prayersListContainer');
       let list = state.oraciones;
-
       if (state.currentFilter === 'destacadas') list = list.filter(o => o.destacado);
       if (state.currentFilter === 'tesoros') list = list.filter(o => o.esTesoro);
       if (state.currentFilter === 'favoritos') list = list.filter(o => isFavorite(o.id));
-
       const q = state.searchQuery.toLowerCase().trim();
       if (q) {
         list = list.filter(o =>
-          o.titulo.toLowerCase().includes(q) ||
-          o.extracto.toLowerCase().includes(q)
+          o.titulo.toLowerCase().includes(q) || o.extracto.toLowerCase().includes(q)
         );
       }
-
       if (!list.length) {
         container.innerHTML = `
           <div class="card text-center" style="padding: 44px 20px;">
@@ -1486,7 +1277,6 @@
         `;
         return;
       }
-
       container.innerHTML = list.map(o => {
         const locked = o.esTesoro && !isTreasureUnlocked(o.id);
         return `
@@ -1519,25 +1309,16 @@
       }).join('');
     }
 
-    /* -------- DETALLE DE ORACIÓN (con video autoplay) -------- */
     function renderDetail(oracion) {
       const body = $('#detailBody');
       const isFav = isFavorite(oracion.id);
       const hasVideo = !!oracion.urlVideo;
-
       body.innerHTML = `
         ${hasVideo ? `
           <div class="video-wrapper" style="margin-bottom: 22px;">
-            <video
-              id="prayerVideo"
-              src="${oracion.urlVideo}"
-              poster="${oracion.urlImagen}"
-              controls
-              autoplay
-              playsinline
-              preload="auto"
-              style="width:100%; max-height: 300px; display:block; background:#000;"
-            >
+            <video id="prayerVideo" src="${oracion.urlVideo}" poster="${oracion.urlImagen}"
+              controls autoplay playsinline preload="auto"
+              style="width:100%; max-height: 300px; display:block; background:#000;">
               Tu navegador no soporta el reproductor de video.
             </video>
           </div>
@@ -1547,27 +1328,21 @@
               onerror="this.src='https://images.unsplash.com/photo-1548625361-195fe57876a3?w=800'">
           </div>
         `}
-
         <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
           ${oracion.destacado ? '<span class="badge badge-gold">⭐ Destacada</span>' : ''}
           ${oracion.esTesoro ? '<span class="badge badge-success">🔑 Tesoro de Fe</span>' : ''}
         </div>
-
         <h1 class="detail-title">${oracion.titulo}</h1>
         <p class="detail-excerpt">${oracion.extracto}</p>
-
         <div class="card" style="padding: 22px;">
           <div class="prayer-content">${oracion.textoCompleto}</div>
         </div>
-
         <div style="text-align: center; padding: 20px 0; border-top: 1px solid var(--border-gold); margin-top: 20px;">
           <p style="font-size: 16px; color: var(--text-muted); font-style: italic;">
             🕊️ «Donde dos o tres se reúnen en mi nombre, allí estoy Yo»
           </p>
         </div>
       `;
-
-      // Autoplay del video
       if (hasVideo) {
         const video = document.getElementById('prayerVideo');
         if (video) {
@@ -1575,15 +1350,11 @@
           if (playPromise !== undefined) {
             playPromise.catch(() => {
               video.muted = true;
-              video.play().catch((err) => {
-                console.warn('No se pudo reproducir el video automáticamente:', err);
-              });
+              video.play().catch((err) => console.warn('Autoplay bloqueado:', err));
             });
           }
         }
       }
-
-      // Actualizar botón favorito
       const btnFav = $('#btnFavorite');
       if (isFav) {
         btnFav.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#dfba77" stroke="#dfba77" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
@@ -1592,26 +1363,21 @@
       }
     }
 
-    /* -------- PERFIL -------- */
     function renderProfile() {
       const u = getTelegramUser();
       $('#userName').textContent = `${u.firstName} ${u.lastName}`.trim();
       $('#userUsername').textContent = u.username;
       $('#userInitial').textContent = u.firstName.charAt(0).toUpperCase();
-
       if (u.photoUrl) {
         $('#userAvatar').innerHTML = `<img src="${u.photoUrl}" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.innerHTML='<span>${u.firstName.charAt(0).toUpperCase()}</span>'">`;
       }
-
       const { isAdFree, remainingMinutes } = getAdFreeStatus();
       $('#adFreeLabel').textContent = isAdFree
         ? `Sin anuncios activo (${remainingMinutes} min)`
         : 'Sin anuncios por 1 hora';
     }
 
-    /* =========================================================
-       9. EVENTOS
-       ========================================================= */
+    /* ============ EVENTOS ============ */
     function switchTab(tab) {
       haptic('light');
       state.currentTab = tab;
@@ -1619,7 +1385,6 @@
       $(`#view-${tab}`).classList.add('active');
       $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
       window.scrollTo({ top: 0, behavior: 'instant' });
-
       const titles = {
         inicio: { title: 'El Santísimo', subtitle: 'Oraciones y Liturgia' },
         oraciones: { title: 'Oraciones', subtitle: 'Devocionario' },
@@ -1627,7 +1392,6 @@
       };
       $('#headerTitle').textContent = titles[tab].title;
       $('#headerSubtitle').textContent = titles[tab].subtitle;
-
       if (tab === 'oraciones') renderPrayersList();
       if (tab === 'perfil') renderProfile();
     }
@@ -1635,14 +1399,12 @@
     function openPrayer(id) {
       const oracion = state.oraciones.find(o => o.id === id);
       if (!oracion) return;
-
       if (oracion.esTesoro && !isTreasureUnlocked(oracion.id)) {
         state.pendingTreasurePrayer = oracion;
         $('#modalTreasure').classList.add('show');
         haptic('medium');
         return;
       }
-
       showDetail(oracion);
     }
 
@@ -1653,52 +1415,41 @@
       document.body.style.overflow = 'hidden';
       markPrayerAsRead(oracion.id);
       renderStats();
-
-      // Mostrar el BackButton nativo de Telegram
       if (TG?.BackButton) {
         try { TG.BackButton.show(); } catch {}
       }
     }
 
     function closeDetail() {
-      // Ocultar el BackButton nativo
       if (TG?.BackButton) {
         try { TG.BackButton.hide(); } catch {}
       }
-
       $('#detailView').classList.remove('show');
       document.body.style.overflow = '';
       state.selectedPrayer = null;
       renderStats();
       renderPrayersList();
-
-      // Anuncio discreto al pulsar atrás (con reglas anti-saturación)
       maybeShowBackAd();
     }
 
-    /* =========================================================
-       10. INICIALIZACIÓN
-       ========================================================= */
+    /* ============ INIT ============ */
     async function init() {
       initTelegram();
+      applyFontSize(getCurrentFontSize());
 
       const theme = Storage.get(STORAGE_KEYS.THEME, 'light');
       if (theme === 'dark') document.body.classList.add('dark');
 
       updateStreak();
-
       state.favorites = getFavorites();
       state.readPrayers = getReadPrayers();
       state.unlockedTreasurePrayers = getUnlockedTreasures();
 
       try {
         [state.oraciones, state.lecturas] = await Promise.all([
-          loadOraciones(),
-          loadLecturas(),
+          loadOraciones(), loadLecturas(),
         ]);
-      } catch (e) {
-        console.error('Load error', e);
-      }
+      } catch (e) { console.error('Load error', e); }
 
       renderFeatured();
       renderStats();
@@ -1708,6 +1459,9 @@
       $$('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => switchTab(btn.dataset.tab));
       });
+
+      $('#btnFontSmaller').addEventListener('click', () => changeFontSize('smaller'));
+      $('#btnFontBigger').addEventListener('click', () => changeFontSize('bigger'));
 
       $('#searchInput').addEventListener('input', (e) => {
         state.searchQuery = e.target.value;
@@ -1726,13 +1480,9 @@
 
       $('#btnBackDetail').addEventListener('click', closeDetail);
 
-      // BackButton nativo de Telegram (Android/iOS/Desktop)
       if (TG?.BackButton) {
         try {
-          TG.BackButton.onClick(() => {
-            haptic('light');
-            closeDetail();
-          });
+          TG.BackButton.onClick(() => { haptic('light'); closeDetail(); });
         } catch {}
       }
 
@@ -1760,7 +1510,6 @@
         $('#modalTreasure').classList.remove('show');
         const prayer = state.pendingTreasurePrayer;
         if (!prayer) return;
-
         showAd('rewarded', () => {
           unlockTreasure(prayer.id);
           hapticNotify('success');
@@ -1774,7 +1523,7 @@
       $('#btnExtraTreasure').addEventListener('click', () => {
         haptic('medium');
         showAd('rewarded', () => {
-          const result = addTreasure(true);
+          addTreasure(true);
           renderStats();
           hapticNotify('success');
           showToast('¡Tesoro extra ganado!', 'success');
@@ -1788,7 +1537,8 @@
           showToast('El modo sin anuncios ya está activo', 'info');
           return;
         }
-        showAd('rewarded', () => {
+        // ✅ Usa Rewarded Popup (formato 'pop')
+        showAd('popup', () => {
           activateAdFree();
           hapticNotify('success');
           showToast('¡1 hora sin anuncios activada!', 'success');
@@ -1825,8 +1575,7 @@
         Storage.set(STORAGE_KEYS.CACHE_ORACIONES, null);
         Storage.set(STORAGE_KEYS.CACHE_LECTURAS, null);
         [state.oraciones, state.lecturas] = await Promise.all([
-          loadOraciones(),
-          loadLecturas(),
+          loadOraciones(), loadLecturas(),
         ]);
         renderFeatured();
         renderReadings();
