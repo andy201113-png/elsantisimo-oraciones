@@ -488,7 +488,6 @@
       100% { background-position: 200% 0; }
     }
 
-    /* ============ VIDEO CON BOTÓN FULLSCREEN ============ */
     .video-wrapper {
       border-radius: 16px; overflow: hidden;
       border: 1.5px solid var(--border-gold);
@@ -524,7 +523,6 @@
       height: 22px;
     }
 
-    /* ============ OVERLAY PANTALLA COMPLETA PARA VIDEO ============ */
     .video-fullscreen-overlay {
       position: fixed;
       inset: 0;
@@ -860,6 +858,9 @@
       CACHE_TTL_MS: 24 * 60 * 60 * 1000,
     };
 
+    /* URL pública de tu Mini App en Telegram (la que se comparte) */
+    const SHARE_APP_URL = 'https://t.me/ElSantisimoOraciones_bot/oraciones';
+
     const state = {
       oraciones: [], lecturas: [],
       currentTab: 'inicio', currentFilter: 'todas', searchQuery: '',
@@ -1091,11 +1092,15 @@
       return { firstName: 'Peregrino', lastName: '', username: '@peregrino', photoUrl: null };
     }
 
-    function shareContent(text) {
-      const url = `https://t.me/share/url?url=${encodeURIComponent(location.href)}&text=${encodeURIComponent(text)}`;
-      if (TG?.openTelegramLink) TG.openTelegramLink(url);
-      else if (navigator.share) navigator.share({ title: 'El Santísimo', text }).catch(() => {});
-      else window.open(url, '_blank');
+    /* =========================================================
+       COMPARTIR - Usa el enlace del bot de Telegram
+       ========================================================= */
+    function shareContent(text, overrideUrl) {
+      const urlToShare = overrideUrl || SHARE_APP_URL;
+      const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(urlToShare)}&text=${encodeURIComponent(text)}`;
+      if (TG?.openTelegramLink) TG.openTelegramLink(shareUrl);
+      else if (navigator.share) navigator.share({ title: 'El Santísimo', text, url: urlToShare }).catch(() => {});
+      else window.open(shareUrl, '_blank');
     }
 
     /* ============ MONETAG ============ */
@@ -1177,21 +1182,16 @@
       setTimeout(() => showAd('interstitial'), 400);
     }
 
-    /* =========================================================
-       PANTALLA COMPLETA PARA VIDEO (overlay CSS - funciona en Telegram)
-       ========================================================= */
+    /* ============ VIDEO FULLSCREEN ============ */
     function openVideoFullscreen(videoUrl) {
       const overlay = document.getElementById('videoFullscreenOverlay');
       const video = document.getElementById('fullscreenVideo');
       if (!overlay || !video) return;
-
       const smallVideo = document.getElementById('prayerVideo');
       if (smallVideo) smallVideo.pause();
-
       video.src = videoUrl;
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
-
       video.play().catch((err) => console.warn('Autoplay fullscreen:', err));
     }
 
@@ -1199,12 +1199,10 @@
       const overlay = document.getElementById('videoFullscreenOverlay');
       const video = document.getElementById('fullscreenVideo');
       if (!overlay || !video) return;
-
       video.pause();
       video.src = '';
       overlay.classList.remove('show');
       document.body.style.overflow = '';
-
       const smallVideo = document.getElementById('prayerVideo');
       if (smallVideo) smallVideo.play().catch(() => {});
     }
@@ -1382,7 +1380,6 @@
       }).join('');
     }
 
-    /* ============ DETALLE CON VIDEO FULLSCREEN ============ */
     function renderDetail(oracion) {
       const body = $('#detailBody');
       const isFav = isFavorite(oracion.id);
@@ -1513,7 +1510,6 @@
     }
 
     function closeDetail() {
-      // Cerrar cualquier video en pantalla completa que esté abierto
       const fsOverlay = document.getElementById('videoFullscreenOverlay');
       if (fsOverlay && fsOverlay.classList.contains('show')) {
         closeVideoFullscreen();
@@ -1578,7 +1574,6 @@
         } catch {}
       }
 
-      // Listener del botón cerrar pantalla completa
       const btnCloseFullscreen = document.getElementById('btnCloseFullscreen');
       if (btnCloseFullscreen) {
         btnCloseFullscreen.addEventListener('click', () => {
@@ -1599,7 +1594,7 @@
       $('#btnShareDetail').addEventListener('click', () => {
         if (!state.selectedPrayer) return;
         haptic('light');
-        shareContent(`🕊️ Te comparto esta oración: "${state.selectedPrayer.titulo}"`);
+        shareContent(`🕊️ Te comparto esta oración: "${state.selectedPrayer.titulo}"\n\nÚnete y reza conmigo en El Santísimo 🙏`);
       });
 
       $('#btnCancelUnlock').addEventListener('click', () => {
@@ -1656,7 +1651,7 @@
 
       $('#btnShare').addEventListener('click', () => {
         haptic('light');
-        shareContent('🕊️ Te invito a "El Santísimo - Oraciones": un devocionario diario con lecturas litúrgicas y oraciones católicas.');
+        shareContent('🕊️ Te invito a "El Santísimo - Oraciones", un devocionario diario con lecturas litúrgicas, oraciones católicas y tesoros de fe.\n\nÁbrelo aquí 👇');
       });
 
       $('#btnPrivacy').addEventListener('click', () => {
